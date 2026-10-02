@@ -1,0 +1,72 @@
+[build-system]
+requires = ["uv_build>=0.11.24,<0.12.0"]
+build-backend = "uv_build"
+
+[project]
+name = "mac-junk-cleaner"
+version = "0.1.0"
+description = "Inspect local macOS disk usage and explicitly clean regenerable caches"
+requires-python = ">=3.11"
+dependencies = []
+readme = "Readme.md"
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.scripts]
+mac-junk-cleaner = "mac_junk_cleaner.cli:main"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.407,<2.0.0",
+    "ruff>=0.14.6,<1.0.0",
+    "taskipy>=1.14.1,<2.0.0",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+exclude-newer = "1 week"
+
+[tool.uv.build-backend]
+module-root = ""
+module-name = "mac_junk_cleaner"
+
+[tool.taskipy.tasks]
+lint = "ruff check . && pyright"
+format = "ruff format ."
+typecheck = "pyright"
+test = "python -m unittest discover -s tests -v"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "UP", "I", "RUF"]
+ignore = ["E501", "E731", "RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.pyright]
+pythonVersion = "3.11"
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+pythonPlatform = "Darwin"
+include = ["mac_junk_cleaner", "tests"]
+exclude = ["**/node_modules", "**/__pycache__", "**/.*", "**/.venv"]
+reportConstantRedefinition = "none"
+reportDeprecated = "warning"
+reportMissingTypeStubs = "none"
+reportPrivateImportUsage = "none"
+reportUnnecessaryComparison = "none"
+reportUnknownArgumentType = "none"
+reportUnknownMemberType = "none"
+reportUnknownVariableType = "none"
+reportUntypedFunctionDecorator = "none"
+reportUnusedFunction = "none"
