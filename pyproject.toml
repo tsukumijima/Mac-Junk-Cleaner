@@ -1,26 +1,32 @@
-[build-system]
-requires = ["uv_build>=0.11.24,<0.12.0"]
-build-backend = "uv_build"
-
 [project]
 name = "mac-junk-cleaner"
 version = "0.1.0"
 description = "Inspect local macOS disk usage and explicitly clean regenerable caches"
-requires-python = ">=3.11"
-dependencies = []
 readme = "Readme.md"
 license = "MIT"
 license-files = ["License.txt"]
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.407",
+    "ruff>=0.14.6,<1.0.0",
+    "taskipy>=1.14.1",
+]
 
 [project.scripts]
 mac-junk-cleaner = "mac_junk_cleaner.cli:main"
 
-[dependency-groups]
-dev = [
-    "pyright>=1.1.407,<2.0.0",
-    "ruff>=0.14.6,<1.0.0",
-    "taskipy>=1.14.1,<2.0.0",
-]
+[tool.taskipy.tasks]
+lint = "ruff check . ; pyright"
+format = "ruff format ."
+typecheck = "pyright"
+test = "python -m unittest discover -s tests -v"
+
+[build-system]
+requires = ["uv_build>=0.11.24,<0.12.0"]
+build-backend = "uv_build"
 
 [tool.uv]
 default-groups = ["dev"]
@@ -29,12 +35,6 @@ exclude-newer = "1 week"
 [tool.uv.build-backend]
 module-root = ""
 module-name = "mac_junk_cleaner"
-
-[tool.taskipy.tasks]
-lint = "ruff check . && pyright"
-format = "ruff format ."
-typecheck = "pyright"
-test = "python -m unittest discover -s tests -v"
 
 [tool.ruff]
 line-length = 120
@@ -60,6 +60,7 @@ typeCheckingMode = "strict"
 pythonPlatform = "Darwin"
 include = ["mac_junk_cleaner", "tests"]
 exclude = ["**/node_modules", "**/__pycache__", "**/.*", "**/.venv"]
+# Pyright/Pylance の型チェックのうち、いくつかのエラー報告を抑制する
 reportConstantRedefinition = "none"
 reportDeprecated = "warning"
 reportMissingTypeStubs = "none"
