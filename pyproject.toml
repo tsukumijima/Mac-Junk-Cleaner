@@ -10,7 +10,7 @@ requires-python = ">=3.11"
 dependencies = []
 readme = "Readme.md"
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["License.txt"]
 
 [project.scripts]
 mac-junk-cleaner = "mac_junk_cleaner.cli:main"
